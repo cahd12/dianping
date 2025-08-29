@@ -23,6 +23,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
        //1.判断是否需要拦截（ThreadLocal）中是否有用户
+        //因为第一层拦截器已经将用户信息放入了ThreadLocal中，所以这里直接获取
         if(UserHolder.getUser()==null){
             //没有需要拦截，设置状态码
             response.setStatus(401);

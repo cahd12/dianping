@@ -34,13 +34,13 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         String token = request.getHeader("authorization");
         //2.基于token获取redis中的用户
         if (StrUtil.isBlank(token)) {
-            return true;
+            return true;//没有token说明未登录，登录验证由后续拦截器处理 这个逻辑是实现两层拦截器设计的关键，它允许未登录用户访问不需要登录的资源。
         }
         String userKey = RedisConstants.LOGIN_USER_KEY + token;
         Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(userKey);
         //3.判断用户是否存在
         if(map.isEmpty()) {
-            return true;
+            return true;//可能是 Token 无效或已过期。 在这种情况下，同样返回 true，放行请求。虽然没有获取到用户信息，但后续的 LoginInterceptor 拦截器会在需要登录的路径上阻止未登录的请求。
         }
         //5.将查询到Hash数据转换为userDTO对象
         UserDTO userDTO = BeanUtil.fillBeanWithMap(map, new UserDTO(), false);
