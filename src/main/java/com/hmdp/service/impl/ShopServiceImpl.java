@@ -240,6 +240,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         updateById(shop);
         //2.删除缓存
         stringRedisTemplate.delete(CACHE_SHOP_KEY+shop.getId());
+        //缺点是 update之后，缓存删除之前的数据可能还会被查询为 旧数据。
         return Result.ok();
     }
 

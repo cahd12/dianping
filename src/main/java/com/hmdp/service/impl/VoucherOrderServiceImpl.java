@@ -204,7 +204,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     public Result seckillVoucher(Long voucherId) {
         //获取用户id
         Long userId = UserHolder.getUser().getId();
-        //获取订单id
+        //生成订单id
         long orderId = redisIdWorker.nextId("order");
         //1.执行lua脚本
         Long result = stringRedisTemplate.execute(
